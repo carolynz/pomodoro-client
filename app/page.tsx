@@ -30,11 +30,11 @@ export default function Home() {
 
   //  POMODORO LOGIC
   const [countdown, setCountdown] = useState(0); //  figure out what number / way to store this — we will think about it later :))))
+  const [currentPeriod, setCurrentPeriod] = useState(0);
 
   const workPeriod = 25 * 60 * 1000; // 25 minutes in milliseconds
   const breakPeriod = 5 * 60 * 1000; // 5 minutes in milliseconds
   const fullCycle = workPeriod + breakPeriod;
-  const progress = (countdown / fullCycle) * 100;
 
   const referenceTime = new Date(); // you can set this to any reference time
   referenceTime.setHours(0, 0, 0, 0); // set to midnight of the current day, for example
@@ -44,30 +44,23 @@ export default function Home() {
     const timeSinceReference = currentTime - referenceTime.getTime();
     const currentCycleTime = timeSinceReference % fullCycle;
 
-    setChatOpen(currentCycleTime >= workPeriod);
-    setCountdown(fullCycle - currentCycleTime);
+    if (currentCycleTime < workPeriod) {
+      // if in pomodoro period
+      setChatOpen(false);
+      setCountdown(workPeriod - currentCycleTime);
+    } else {
+      // if in break period
+      setChatOpen(true);
+      setCountdown(fullCycle - currentCycleTime);
+    }
   };
 
   // Call this function regularly to update the state
-  setInterval(updatePomodoroState, 1000);
-
-  // render pomodoro progress
-  const radius = 50;
-  const circumference = 2 * Math.PI * radius;
-  const offset = ((100 - progress) / 100) * circumference;
-
-  const progressCircleStyle = {
-    transition: "stroke-dashoffset 0.35s",
-    transformOrigin: "0% 50%",
-  };
-
-  // const progressTextStyle = {
-  //   position: "absolute",
-  //   top: "50%",
-  //   left: "50%",
-  //   transform: "translate(-50%, -50%)",
-  //   fontSize: "1rem",
-  // };
+  // setInterval(updatePomodoroState, 1000);
+  useEffect(() => {
+    const interval = setInterval(updatePomodoroState, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   const minutes = Math.floor(countdown / (60 * 1000));
   const seconds = Math.floor((countdown % (60 * 1000)) / 1000);
@@ -131,22 +124,33 @@ export default function Home() {
       {/* TODO: need to have some sort of loading state */}
       {chatOpen ? (
         <>
-          <div className="flex flex-col justify-end bg-black text-green-400 h-[40rem] min-w-[90%] shadow-md ">
-            <div className="h-full last:border-b-0 overflow-y-scroll">
+          <div className="relative flex flex-col justify-end h-[40rem] bg-white min-w-[90%] rounded-xl">
+            <div className="flex flex-row p-4 justify-between ">
+              <div className="flex flex-row space-x-1 items-center">
+                <div className="w-2 h-2 bg-green-600 rounded-full" />
+                <p className="text-xs">{numberOnline} here</p>
+              </div>
+              <div className="text-xs">
+                Chat closes in {minutes}:{secondsPadded}
+              </div>
+            </div>
+            <div className="h-full pl-4 last:border-b-0 overflow-y-scroll">
               {messages.map((msg, i) => {
                 return (
-                  <div className="w-full py-1 px-2" key={i}>
-                    {msg.author} : {msg.message}
+                  <div className="w-full py-2" key={i}>
+                    {/* note: need random colors for authors */}
+                    <p className="text-slate-500">{msg.author}</p>
+                    <p>{msg.message}</p>
                   </div>
                 );
               })}
             </div>
-            <div className="w-full flex">
+            <div className="w-full">
               <input
                 type="text"
                 placeholder="New message..."
                 value={myMessage}
-                className="outline-none py-2 px-2 rounded-bl-md flex-1 bg-black text-green-400"
+                className="outline-none p-4 text-slate-900"
                 onChange={(e) => setMyMessage(e.target.value)}
                 onKeyUp={handleKeypress}
               />
@@ -155,8 +159,7 @@ export default function Home() {
         </>
       ) : (
         <>
-          {/* progress countdown */}
-
+          <p className="text-xs mb-6">Pomodoro</p>
           <div className="text-5xl">
             {minutes}:{secondsPadded}
           </div>
