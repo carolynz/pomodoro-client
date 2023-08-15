@@ -40,17 +40,33 @@ export default function Home() {
   const referenceTime = new Date(); // you can set this to any reference time
   referenceTime.setHours(0, 0, 0, 0); // set to midnight of the current day, for example
 
+  const playTimerSound = () => {
+    const audio = new Audio("/sounds/timer.mp3");
+    audio.play();
+    console.log("playing sound");
+  };
+
   const updatePomodoroState = () => {
     const currentTime = new Date().getTime();
     const timeSinceReference = currentTime - referenceTime.getTime();
     const currentCycleTime = timeSinceReference % fullCycle;
 
     if (currentCycleTime < workPeriod) {
+      if (chatOpen) {
+        // if chat was previously open and now we are switching back to pomodoro — play a sound. this is just for testing purposes
+        playTimerSound();
+      }
       // if in pomodoro period
       setChatOpen(false);
+      // FOR WORKING DEBUG ONLY:
+      // setChatOpen(true);
       setCountdown(workPeriod - currentCycleTime);
     } else {
       // if in break period
+      if (!chatOpen) {
+        // if chat was previously closed, and now we are switching to open — play a timer sound
+        playTimerSound();
+      }
       setChatOpen(true);
       setCountdown(fullCycle - currentCycleTime);
     }
@@ -133,14 +149,12 @@ export default function Home() {
     <main className="flex w-screen h-screen flex-col items-center justify-between p-4">
       {/* TODO: need to have some sort of loading state */}
       <div className="text-xl font-bold mb-6">pomo.chat</div>
+
       {chatOpen ? (
+        // TODO: refactor into chat component?
         <>
-          <div className="relative flex flex-col justify-end h-[40rem] bg-white min-w-[90%] rounded-xl">
+          <div className="relative flex flex-col justify-end min-w-[300px] max-w-[600px] w-full h-full bg-white rounded-xl my-8">
             <div className="flex flex-row p-4 justify-between ">
-              <div className="flex flex-row space-x-1 items-center">
-                <div className="w-2 h-2 bg-green-600 rounded-full" />
-                <p className="text-xs">{numberOnline} here</p>
-              </div>
               <div className="text-xs">
                 Chat closes in {minutesPadded}:{secondsPadded}
               </div>
@@ -160,7 +174,7 @@ export default function Home() {
                 type="text"
                 placeholder="New message..."
                 value={myMessage}
-                className="outline-none p-4 text-slate-900"
+                className="outline p-4 text-slate-900 w-full bg-transparent rounded-xl"
                 onChange={(e) => setMyMessage(e.target.value)}
                 onKeyUp={handleKeypress}
               />
@@ -168,6 +182,7 @@ export default function Home() {
           </div>
         </>
       ) : (
+        // TODO: refactor into timer component?
         <>
           <div className="absolute flex w-full h-full items-center justify-center">
             {/* <Image
@@ -190,10 +205,10 @@ export default function Home() {
             />
           </div>
           <div className="flex text-[50vw] sm:text-[20rem] flex-col md:flex-row justify-center items-center w-full align-center">
-            <div className="time flex-1 text-center md:text-right pb-10 md:pb-0 md:pr-24">
+            <div className="time flex-1 text-center md:text-right pb-10 md:pb-0 md:pr-32">
               {minutesPadded}
             </div>
-            <div className="time flex-1 text-center md:text-left pt-10 md:pt-0 md:pl-24">
+            <div className="time flex-1 text-center md:text-left pt-12 md:pt-0 md:pl-32">
               {secondsPadded}
             </div>
           </div>
