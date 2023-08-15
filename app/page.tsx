@@ -189,7 +189,7 @@ export default function Home() {
               style={{ "max-width": "300px" }}
             />
           </div>
-          <div className="flex text-[10rem] sm:text-[20rem] flex-col md:flex-row justify-center items-center w-full align-center">
+          <div className="flex text-[50vw] sm:text-[20rem] flex-col md:flex-row justify-center items-center w-full align-center">
             <div className="time flex-1 text-center md:text-right pb-10 md:pb-0 md:pr-24">
               {minutesPadded}
             </div>
