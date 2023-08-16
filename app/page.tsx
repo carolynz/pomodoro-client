@@ -347,6 +347,14 @@ export default function Home() {
           >
             kelin
           </a>
+          <span className="mx-1">·</span>
+          <a
+            href="https://www.buymeacoffee.com/kelin"
+            target="_blank"
+            className="font-semibold hover:underline"
+          >
+            buy me a coffee?
+          </a>
         </p>
       </main>
     </>
