@@ -170,7 +170,7 @@ export default function Home() {
         {chatOpen ? (
           // TODO: refactor into chat component?
           <>
-            <div className="relative flex flex-col justify-end min-w-[300px] max-w-[600px] w-full bg-white rounded-xl my-8">
+            <div className="relative flex flex-col justify-end min-w-[300px] max-w-[600px] w-full h-80vh sm:h-full bg-white rounded-xl my-8">
               <div className="flex flex-row p-4 justify-between ">
                 <div className="text-xs">
                   Chat closes in {minutesPadded}:{secondsPadded}
@@ -220,7 +220,7 @@ export default function Home() {
         ) : (
           // TODO: refactor into timer component?
           <>
-            <div className="absolute flex w-full h-full items-center justify-center">
+            <div className="absolute flex w-full h-80vh sm:h-full items-center justify-center">
               {/* <Image
             src="/images/tomato.png"
             alt="watercolor illustration of a tomato"
