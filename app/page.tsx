@@ -77,9 +77,9 @@ export default function Home() {
         // playTimerSound();
       }
       // if in pomodoro period
-      setChatOpen(false);
+      // setChatOpen(false);
       // UNCOMMENT THE BELOW LINE FOR WORKING DEBUG ONLY:
-      // setChatOpen(true);
+      setChatOpen(true);
       setCountdown(workPeriod - currentCycleTime);
     } else {
       // if in break period
@@ -180,7 +180,10 @@ export default function Home() {
         <meta property="og:title" content="pomo.chat" />
         <meta property="og:description" content="25 min focus, 5 min chat" />
         <meta property="og:url" content="https://pomo.chat" />
-        <meta property="og:image" content="/images/link-preview.png" />
+        <meta
+          property="og:image:secure_url"
+          content="/images/link-preview.png"
+        />
       </Head>
       {/* <main className="flex w-full h-screen flex-col items-center justify-between p-4  text-slate-900"> */}
       <main
