@@ -240,7 +240,7 @@ export default function Home() {
                 className="max-w-[300px] pb-[20px] md:pb-[50px]"
               />
             </div>
-            <div className="flex text-[50vw] sm:text-[20rem] flex-col md:flex-row justify-center items-center w-full align-center">
+            <div className="flex text-[50vw] sm:text-[20rem] flex-col md:flex-row justify-center items-center w-full align-center text-black">
               <div className="time flex-1 text-center pb-4 md:pb-0 md:pr-32">
                 {minutesPadded}
               </div>
