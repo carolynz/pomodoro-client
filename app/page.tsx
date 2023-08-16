@@ -220,11 +220,13 @@ export default function Home() {
         {/* for Safari on Mac OS */}
         <link
           rel="apple-touch-icon"
+          type="image/png"
           sizes="180x180"
           href="/favicon_io/apple-touch-icon-180x180.png"
         />
         <link
           rel="apple-touch-icon"
+          type="image/png"
           sizes="167x167"
           href="/favicon_io/apple-touch-icon-167x167.png"
         />
