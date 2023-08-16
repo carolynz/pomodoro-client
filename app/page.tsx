@@ -170,7 +170,7 @@ export default function Home() {
         {chatOpen ? (
           // TODO: refactor into chat component?
           <>
-            <div className="relative flex flex-col justify-end min-w-[300px] max-w-[600px] w-full h-full bg-white rounded-xl my-8">
+            <div className="relative flex flex-col justify-end min-w-[300px] max-w-[600px] w-full bg-white rounded-xl my-8">
               <div className="flex flex-row p-4 justify-between ">
                 <div className="text-xs">
                   Chat closes in {minutesPadded}:{secondsPadded}
@@ -181,7 +181,7 @@ export default function Home() {
                   return (
                     <div className="w-full py-2" key={i}>
                       <p className="text-slate-500">{msg.author}</p>
-                      <p>{msg.message}</p>
+                      <p className="text-slate-900">{msg.message}</p>
                     </div>
                   );
                 })}
