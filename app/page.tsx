@@ -30,6 +30,25 @@ export default function Home() {
     
 */
 
+  // mobile layout — avoid browser bar covering screen
+
+  useEffect(() => {
+    const setContainerHeight = () => {
+      // Get the actual visible height
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty("--vh", `${vh}px`);
+    };
+
+    // Initial call
+    setContainerHeight();
+
+    // Listen for resizing events
+    window.addEventListener("resize", setContainerHeight);
+
+    // Cleanup
+    return () => window.removeEventListener("resize", setContainerHeight);
+  }, []);
+
   //  POMODORO LOGIC
   const [countdown, setCountdown] = useState(0); //  figure out what number / way to store this — we will think about it later :))))
   const [currentPeriod, setCurrentPeriod] = useState(0);
@@ -163,7 +182,11 @@ export default function Home() {
         <meta property="og:url" content="https://pomo.chat" />
         <meta property="og:image" content="/images/link-preview.png" />
       </Head>
-      <main className="flex w-screen h-screen flex-col items-center justify-between p-4  text-slate-900">
+      {/* <main className="flex w-full h-screen flex-col items-center justify-between p-4  text-slate-900"> */}
+      <main
+        className="main-container flex flex-col items-center justify-between p-4 text-slate-900"
+        style={{ height: "calc(var(--vh, 1vh) * 100)" }}
+      >
         {/* TODO: need to have some sort of loading state */}
         <div className="text-2xl font-bold mb-6 text-black">pomo.chat</div>
 

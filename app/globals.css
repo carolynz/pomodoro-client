@@ -21,6 +21,11 @@ body {
   @apply bg-cream;
 }
 
+.main-container {
+  width: 100%;
+  /* Set a default height (can be adjusted) */
+  height: 100vh;
+}
 .time {
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
     1px 1px 0 #000;
