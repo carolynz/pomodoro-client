@@ -77,9 +77,9 @@ export default function Home() {
         // playTimerSound();
       }
       // if in pomodoro period
-      // setChatOpen(false);
+      setChatOpen(false);
       // UNCOMMENT THE BELOW LINE FOR WORKING DEBUG ONLY:
-      setChatOpen(true);
+      // setChatOpen(true);
       setCountdown(workPeriod - currentCycleTime);
     } else {
       // if in break period
@@ -191,20 +191,21 @@ export default function Home() {
         style={{ height: "calc(var(--vh, 1vh) * 100)" }}
       >
         {/* TODO: need to have some sort of loading state */}
-        <div className="text-2xl font-bold mb-6 text-black">pomo.chat</div>
+        <div className="text-2xl font-bold text-black">pomo.chat</div>
 
         {chatOpen ? (
           // TODO: refactor into chat component?
           <>
+            <p className="text-slate-500">
+              Chat closes in {minutesPadded}:{secondsPadded}
+            </p>
             <div className="relative flex flex-col justify-end min-w-[300px] max-w-[600px] w-full h-[80vh] sm:h-full bg-white rounded-xl my-8">
               {/* chat header */}
-              <div className="flex flex-row p-4 justify-between ">
-                <div className="text-slate-500">
-                  Chat closes in {minutesPadded}:{secondsPadded}
-                </div>
-              </div>
-              {/* chat body */}
+              {/* <div className="flex flex-row p-4 justify-between ">
+                
+              </div> */}
 
+              {/* chat body */}
               <MessageList messages={messages} />
 
               <div className="w-full ">
