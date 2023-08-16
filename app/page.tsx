@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
+import Head from "next/head";
 
 // do we need this line?
 let socket: Socket;
@@ -154,65 +155,76 @@ export default function Home() {
   };
 
   return (
-    <main className="flex w-screen h-screen flex-col items-center justify-between p-4">
-      {/* TODO: need to have some sort of loading state */}
-      <div className="text-2xl font-bold mb-6">pomo.chat</div>
+    <>
+      <Head>
+        <title>Your Page Title</title>
+        <meta property="og:title" content="Pomodoro Chat" />
+        <meta
+          property="og:description"
+          content="25 minutes of focus, 5 minutes of chat"
+        />
+        <meta property="og:url" content="https://pomo.chat" />
+        <meta property="og:image" content="/images/link-preview.png" />
+      </Head>
+      <main className="flex w-screen h-screen flex-col items-center justify-between p-4">
+        {/* TODO: need to have some sort of loading state */}
+        <div className="text-2xl font-bold mb-6">pomo.chat</div>
 
-      {chatOpen ? (
-        // TODO: refactor into chat component?
-        <>
-          <div className="relative flex flex-col justify-end min-w-[300px] max-w-[600px] w-full h-full bg-white rounded-xl my-8">
-            <div className="flex flex-row p-4 justify-between ">
-              <div className="text-xs">
-                Chat closes in {minutesPadded}:{secondsPadded}
+        {chatOpen ? (
+          // TODO: refactor into chat component?
+          <>
+            <div className="relative flex flex-col justify-end min-w-[300px] max-w-[600px] w-full h-full bg-white rounded-xl my-8">
+              <div className="flex flex-row p-4 justify-between ">
+                <div className="text-xs">
+                  Chat closes in {minutesPadded}:{secondsPadded}
+                </div>
               </div>
-            </div>
-            <div className="h-full pl-4 last:border-b-0 overflow-y-scroll">
-              {messages.map((msg, i) => {
-                return (
-                  <div className="w-full py-2" key={i}>
-                    <p className="text-slate-500">{msg.author}</p>
-                    <p>{msg.message}</p>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="w-full">
-              {name ? (
-                // if user has name, let them input message
-                // TODO: add message filtering
-                <input
-                  type="text"
-                  placeholder="New message..."
-                  value={myMessage}
-                  className="outline p-4 text-slate-900 w-full bg-transparent rounded-xl"
-                  onChange={(e) => setMyMessage(e.target.value)}
-                  onKeyUp={handleMessageKeypress}
-                />
-              ) : (
-                // if user has not set name, cannot input message — must enter name first
-                // TODO: add name error handling
-                <>
+              <div className="h-full pl-4 last:border-b-0 overflow-y-scroll">
+                {messages.map((msg, i) => {
+                  return (
+                    <div className="w-full py-2" key={i}>
+                      <p className="text-slate-500">{msg.author}</p>
+                      <p>{msg.message}</p>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="w-full">
+                {name ? (
+                  // if user has name, let them input message
+                  // TODO: add message filtering
                   <input
                     type="text"
-                    placeholder="Enter your name to join the chat"
-                    value={nameField}
-                    className="p-4 outline focus:outline-2 focus:outline-slate-400 focus:outline-offset-4
+                    placeholder="New message..."
+                    value={myMessage}
+                    className="outline p-4 text-slate-900 w-full bg-transparent rounded-xl"
+                    onChange={(e) => setMyMessage(e.target.value)}
+                    onKeyUp={handleMessageKeypress}
+                  />
+                ) : (
+                  // if user has not set name, cannot input message — must enter name first
+                  // TODO: add name error handling
+                  <>
+                    <input
+                      type="text"
+                      placeholder="Enter your name to join the chat"
+                      value={nameField}
+                      className="p-4 outline focus:outline-2 focus:outline-slate-400 focus:outline-offset-4
                     
                      text-slate-900 w-full bg-transparent rounded-xl"
-                    onChange={(e) => setNameField(e.target.value)}
-                    onKeyUp={handleNameKeypress}
-                  />
-                </>
-              )}
+                      onChange={(e) => setNameField(e.target.value)}
+                      onKeyUp={handleNameKeypress}
+                    />
+                  </>
+                )}
+              </div>
             </div>
-          </div>
-        </>
-      ) : (
-        // TODO: refactor into timer component?
-        <>
-          <div className="absolute flex w-full h-full items-center justify-center">
-            {/* <Image
+          </>
+        ) : (
+          // TODO: refactor into timer component?
+          <>
+            <div className="absolute flex w-full h-full items-center justify-center">
+              {/* <Image
             src="/images/tomato.png"
             alt="watercolor illustration of a tomato"
             width={250}
@@ -223,27 +235,27 @@ export default function Home() {
             //   objectFit: "contain",
             // }}
           /> */}
-            <img
-              width="40%"
-              height="auto"
-              src="/images/tomato.png"
-              alt="watercolor illustration of a tomato"
-              className="max-w-[300px] pb-[20px] md:pb-[50px]"
-            />
-          </div>
-          <div className="flex text-[50vw] sm:text-[20rem] flex-col md:flex-row justify-center items-center w-full align-center">
-            <div className="time flex-1 text-center md:text-right pb-10 md:pb-0 md:pr-32">
-              {minutesPadded}
+              <img
+                width="40%"
+                height="auto"
+                src="/images/tomato.png"
+                alt="watercolor illustration of a tomato"
+                className="max-w-[300px] pb-[20px] md:pb-[50px]"
+              />
             </div>
-            <div className="time flex-1 text-center md:text-left pt-12 md:pt-0 md:pl-32">
-              {secondsPadded}
+            <div className="flex text-[50vw] sm:text-[20rem] flex-col md:flex-row justify-center items-center w-full align-center">
+              <div className="time flex-1 text-center md:text-right pb-10 md:pb-0 md:pr-32">
+                {minutesPadded}
+              </div>
+              <div className="time flex-1 text-center md:text-left pt-12 md:pt-0 md:pl-32">
+                {secondsPadded}
+              </div>
             </div>
-          </div>
-        </>
-      )}
-      {/* if user has not entered name, include persistent floating prompt to enter name */}
+          </>
+        )}
+        {/* if user has not entered name, include persistent floating prompt to enter name */}
 
-      {/* {!name && (
+        {/* {!name && (
         <>
           <div className="absolute bottom-20 w-[400px]">
             <input
@@ -257,10 +269,11 @@ export default function Home() {
           </div>
         </>
       )} */}
-      <div className="flex flex-row space-x-1 items-center mt-6">
-        <div className="w-2 h-2 bg-green-600 rounded-full" />
-        <p className="text-lg font-light">{numberOnline} online</p>
-      </div>
-    </main>
+        <div className="flex flex-row space-x-1 items-center mt-6">
+          <div className="w-2 h-2 bg-green-600 rounded-full" />
+          <p className="text-lg font-light">{numberOnline} online</p>
+        </div>
+      </main>
+    </>
   );
 }
