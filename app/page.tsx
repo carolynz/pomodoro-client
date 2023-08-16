@@ -176,7 +176,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>pomo.chat</title>
+        <title>🍅 pomo.chat 💬</title>
         <meta property="og:title" content="pomo.chat" />
         <meta property="og:description" content="25 min focus, 5 min chat" />
         <meta property="og:url" content="https://pomo.chat" />
