@@ -163,7 +163,7 @@ export default function Home() {
         <meta property="og:url" content="https://pomo.chat" />
         <meta property="og:image" content="/images/link-preview.png" />
       </Head>
-      <main className="flex w-screen h-screen flex-col items-center justify-between p-4">
+      <main className="flex w-screen h-screen flex-col items-center justify-between p-4  text-slate-900">
         {/* TODO: need to have some sort of loading state */}
         <div className="text-2xl font-bold mb-6 text-black">pomo.chat</div>
 
