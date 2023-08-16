@@ -237,15 +237,28 @@ export default function Home() {
         style={{ height: "calc(var(--vh, 1vh) * 100)" }}
       >
         {/* TODO: need to have some sort of loading state */}
-        <div className="text-2xl font-bold text-black">pomo.chat</div>
-
+        {/* top header */}
+        <div className="flex flex-col items-center">
+          <div className="text-2xl font-bold text-black">pomo.chat</div>
+          <div className="flex flex-row justify-center">
+            <div className="flex flex-row space-x-1 items-center">
+              <div className="w-2 h-2 bg-green-600 rounded-full" />
+              <p className="text-sm">{numberOnline} online</p>
+            </div>
+            {chatOpen && (
+              <p className="text-sm">
+                <span className="mx-1">·</span>Chat closes in{" "}
+                <span className="num-monospace">
+                  {minutesPadded}:{secondsPadded}
+                </span>
+              </p>
+            )}
+          </div>
+        </div>
         {chatOpen ? (
           // TODO: refactor into chat component?
           <>
-            <p className="text-slate-500">
-              Chat closes in {minutesPadded}:{secondsPadded}
-            </p>
-            <div className="relative flex flex-col justify-end min-w-[300px] max-w-[600px] w-full h-[80vh] sm:h-full bg-white rounded-xl my-8">
+            <div className="relative flex flex-col justify-end min-w-[300px] max-w-[600px] w-full h-[70vh] bg-white rounded-xl my-4">
               {/* chat header */}
               {/* <div className="flex flex-row p-4 justify-between ">
                 
@@ -254,6 +267,7 @@ export default function Home() {
               {/* chat body */}
               <MessageList messages={messages} />
 
+              {/* msg input/name */}
               <div className="w-full ">
                 {name ? (
                   // if user has name, let them input message
@@ -290,7 +304,7 @@ export default function Home() {
           // TODO: refactor into timer component?
           <>
             <div className="flex text-[50vw] sm:text-[20rem] flex-col md:flex-row justify-center items-center w-full align-center text-black">
-              <div className="time md:w-1/3 text-center pb-4 md:pb-0">
+              <div className="time md:w-1/3 text-center pb-4 md:pb-0 num-monospace">
                 {minutesPadded}
               </div>
               <div className="w-full md:w-1/3 md:max-w-[300px] flex justify-center">
@@ -302,7 +316,7 @@ export default function Home() {
                   className="w-1/2 md:w-full max-w-[300px] pb-[20px] md:pb-[50px] -mt-20 -mb-20 md:mt-0 md:mb-0 z-10 object-cover"
                 />
               </div>
-              <div className="time md:w-1/3 text-center pt-4 md:pt-0">
+              <div className="time md:w-1/3 text-center pt-4 md:pt-0 num-monospace">
                 {secondsPadded}
               </div>
             </div>
@@ -324,10 +338,16 @@ export default function Home() {
           </div>
         </>
       )} */}
-        <div className="flex flex-row space-x-1 items-center mt-6">
-          <div className="w-2 h-2 bg-green-600 rounded-full" />
-          <p className="text-lg font-light">{numberOnline} online</p>
-        </div>
+        <p className="text-sm">
+          made by{" "}
+          <a
+            href="https://www.tiktok.com/@kelin.online"
+            target="_blank"
+            className="font-semibold hover:underline"
+          >
+            kelin
+          </a>
+        </p>
       </main>
     </>
   );
