@@ -172,7 +172,7 @@ export default function Home() {
           <>
             <div className="relative flex flex-col justify-end min-w-[300px] max-w-[600px] w-full h-[80vh] sm:h-full bg-white rounded-xl my-8">
               <div className="flex flex-row p-4 justify-between ">
-                <div className="text-xs">
+                <div className="text-slate-500">
                   Chat closes in {minutesPadded}:{secondsPadded}
                 </div>
               </div>
@@ -220,18 +220,7 @@ export default function Home() {
         ) : (
           // TODO: refactor into timer component?
           <>
-            <div className="absolute flex w-full h-[80vh] sm:h-full items-center justify-center">
-              {/* <Image
-            src="/images/tomato.png"
-            alt="watercolor illustration of a tomato"
-            width={250}
-            height={250}
-            // fill
-            // sizes="20vw"
-            // style={{
-            //   objectFit: "contain",
-            // }}
-          /> */}
+            {/* <div className="absolute flex w-full h-[80vh] sm:h-full items-center justify-center">
               <img
                 width="40%"
                 height="auto"
@@ -239,12 +228,21 @@ export default function Home() {
                 alt="watercolor illustration of a tomato"
                 className="max-w-[300px] pb-[20px] md:pb-[50px]"
               />
-            </div>
+            </div> */}
             <div className="flex text-[50vw] sm:text-[20rem] flex-col md:flex-row justify-center items-center w-full align-center text-black">
-              <div className="time flex-1 text-center pb-4 md:pb-0 md:pr-32">
+              <div className="time md:w-1/3 text-center pb-4 md:pb-0">
                 {minutesPadded}
               </div>
-              <div className="time flex-1 text-center pt-4 md:pt-0 md:pl-32">
+              <div className="w-full md:w-1/3 md:max-w-[300px] flex justify-center">
+                <img
+                  width="100%"
+                  height="auto"
+                  src="/images/tomato.png"
+                  alt="watercolor illustration of a tomato"
+                  className="w-1/2 md:w-full max-w-[300px] pb-[20px] md:pb-[50px] -mt-20 -mb-20 md:mt-0 md:mb-0 z-10 object-cover"
+                />
+              </div>
+              <div className="time md:w-1/3 text-center pt-4 md:pt-0">
                 {secondsPadded}
               </div>
             </div>
