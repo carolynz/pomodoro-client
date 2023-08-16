@@ -241,10 +241,10 @@ export default function Home() {
               />
             </div>
             <div className="flex text-[50vw] sm:text-[20rem] flex-col md:flex-row justify-center items-center w-full align-center">
-              <div className="time flex-1 text-center md:text-right pb-10 md:pb-0 md:pr-32">
+              <div className="time flex-1 text-center pb-10 md:pb-0 md:pr-32">
                 {minutesPadded}
               </div>
-              <div className="time flex-1 text-center md:text-left pt-12 md:pt-0 md:pl-32">
+              <div className="time flex-1 text-center pt-12 md:pt-0 md:pl-32">
                 {secondsPadded}
               </div>
             </div>
