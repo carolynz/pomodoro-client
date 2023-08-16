@@ -77,9 +77,9 @@ export default function Home() {
         // playTimerSound();
       }
       // if in pomodoro period
-      // setChatOpen(false);
+      setChatOpen(false);
       // UNCOMMENT THE BELOW LINE FOR WORKING DEBUG ONLY:
-      setChatOpen(true);
+      // setChatOpen(true);
       setCountdown(workPeriod - currentCycleTime);
     } else {
       // if in break period
