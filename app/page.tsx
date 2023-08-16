@@ -55,7 +55,7 @@ export default function Home() {
     if (currentCycleTime < workPeriod) {
       if (chatOpen) {
         // if chat was previously open and now we are switching back to pomodoro — play a sound. this is just for testing purposes
-        playTimerSound();
+        // playTimerSound();
       }
       // if in pomodoro period
       setChatOpen(false);
@@ -66,7 +66,7 @@ export default function Home() {
       // if in break period
       if (!chatOpen) {
         // if chat was previously closed, and now we are switching to open — play a timer sound
-        playTimerSound();
+        // playTimerSound();
       }
       setChatOpen(true);
       setCountdown(fullCycle - currentCycleTime);
