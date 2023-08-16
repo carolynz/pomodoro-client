@@ -184,6 +184,50 @@ export default function Home() {
           content="/images/link-preview.png"
         />
         <meta name="thumbnail" content="/images/link-preview.png" />
+
+        {/* on favicon declarations:
+         https://loqbooq.app/blog/add-favicon-modern-browser-guide */}
+
+        <link rel="icon" href="/favicon_io/favicon.ico" />
+        {/* for all browsers */}
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="favicon-16x16.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="favicon-32x32.png"
+        />
+
+        {/* for Android and Chrome */}
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="192x192"
+          href="android-chrome-192x192.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="512x512"
+          href="android-chrome-512x512.png"
+        />
+
+        {/* for Safari on Mac OS */}
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/favicon_io/apple-touch-icon-180x180.png"
+        />
+        <link
+          rel="apple-touch-icon"
+          sizes="167x167"
+          href="/favicon_io/apple-touch-icon-167x167.png"
+        />
       </Head>
       {/* <main className="flex w-full h-screen flex-col items-center justify-between p-4  text-slate-900"> */}
       <main
