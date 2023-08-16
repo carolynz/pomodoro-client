@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { io, Socket } from "socket.io-client";
 import Head from "next/head";
+import MessageList from "@/components/MessageList";
 
 // do we need this line?
 let socket: Socket;
@@ -31,7 +32,6 @@ export default function Home() {
 */
 
   // mobile layout — avoid browser bar covering screen
-
   useEffect(() => {
     const setContainerHeight = () => {
       // Get the actual visible height
@@ -77,9 +77,9 @@ export default function Home() {
         // playTimerSound();
       }
       // if in pomodoro period
-      setChatOpen(false);
+      // setChatOpen(false);
       // UNCOMMENT THE BELOW LINE FOR WORKING DEBUG ONLY:
-      // setChatOpen(true);
+      setChatOpen(true);
       setCountdown(workPeriod - currentCycleTime);
     } else {
       // if in break period
@@ -92,8 +92,7 @@ export default function Home() {
     }
   };
 
-  // Call this function regularly to update the state
-  // setInterval(updatePomodoroState, 1000);
+  // Updates pomodoro timer every second
   useEffect(() => {
     const interval = setInterval(updatePomodoroState, 1000);
     return () => clearInterval(interval);
@@ -106,6 +105,7 @@ export default function Home() {
   const secondsPadded = String(seconds).padStart(2, "0");
 
   // CHAT + WEBSOCKETS LOGIC
+
   const [chatOpen, setChatOpen] = useState(false);
   const [name, setName] = useState<string | null>(null);
   const [nameField, setNameField] = useState<string>("");
@@ -115,6 +115,25 @@ export default function Home() {
 
   // set up socket connection
   useEffect(() => {
+    const socketInitializer = () => {
+      socket = io("https://pomodoro-server-o0a9.onrender.com");
+      console.log("new socket:", socket);
+
+      // when receiving new message, add to message history
+      socket.on("newIncomingMessage", (msg) => {
+        console.log("incoming message: ", msg);
+        setMessages((currentMsg) => [
+          ...currentMsg,
+          { author: msg.author, message: msg.message },
+        ]);
+      });
+
+      // when more people join, add count
+      socket.on("updateClientCount", (count) => {
+        console.log("new online count: ", count);
+        setNumberOnline(count);
+      });
+    };
     socketInitializer();
 
     // Cleanup: Disconnect the socket when the component is unmounted
@@ -126,27 +145,6 @@ export default function Home() {
       }
     };
   }, []);
-
-  const socketInitializer = () => {
-    socket = io("https://pomodoro-server-o0a9.onrender.com");
-    console.log("new socket:", socket);
-
-    // when receiving new message, add to message history
-    socket.on("newIncomingMessage", (msg) => {
-      console.log("incoming message: ", msg);
-      setMessages((currentMsg) => [
-        ...currentMsg,
-        { author: msg.author, message: msg.message },
-      ]);
-      console.log(messages);
-    });
-
-    // when more people join, add count
-    socket.on("updateClientCount", (count) => {
-      console.log("new online count: ", count);
-      setNumberOnline(count);
-    });
-  };
 
   const sendMessage = async () => {
     if (name) {
@@ -185,6 +183,7 @@ export default function Home() {
           property="og:image:secure_url"
           content="/images/link-preview.png"
         />
+        <meta name="thumbnail" content="/images/link-preview.png" />
       </Head>
       {/* <main className="flex w-full h-screen flex-col items-center justify-between p-4  text-slate-900"> */}
       <main
@@ -198,22 +197,17 @@ export default function Home() {
           // TODO: refactor into chat component?
           <>
             <div className="relative flex flex-col justify-end min-w-[300px] max-w-[600px] w-full h-[80vh] sm:h-full bg-white rounded-xl my-8">
+              {/* chat header */}
               <div className="flex flex-row p-4 justify-between ">
                 <div className="text-slate-500">
                   Chat closes in {minutesPadded}:{secondsPadded}
                 </div>
               </div>
-              <div className="h-full pl-4 last:border-b-0 overflow-y-scroll">
-                {messages.map((msg, i) => {
-                  return (
-                    <div className="w-full py-2" key={i}>
-                      <p className="text-slate-500">{msg.author}</p>
-                      <p className="text-slate-900">{msg.message}</p>
-                    </div>
-                  );
-                })}
-              </div>
-              <div className="w-full">
+              {/* chat body */}
+
+              <MessageList messages={messages} />
+
+              <div className="w-full ">
                 {name ? (
                   // if user has name, let them input message
                   // TODO: add message filtering
@@ -227,6 +221,7 @@ export default function Home() {
                   />
                 ) : (
                   // if user has not set name, cannot input message — must enter name first
+                  // TODO make this more differentiated from input
                   // TODO: add name error handling
                   <>
                     <input
@@ -247,15 +242,6 @@ export default function Home() {
         ) : (
           // TODO: refactor into timer component?
           <>
-            {/* <div className="absolute flex w-full h-[80vh] sm:h-full items-center justify-center">
-              <img
-                width="40%"
-                height="auto"
-                src="/images/tomato.png"
-                alt="watercolor illustration of a tomato"
-                className="max-w-[300px] pb-[20px] md:pb-[50px]"
-              />
-            </div> */}
             <div className="flex text-[50vw] sm:text-[20rem] flex-col md:flex-row justify-center items-center w-full align-center text-black">
               <div className="time md:w-1/3 text-center pb-4 md:pb-0">
                 {minutesPadded}
