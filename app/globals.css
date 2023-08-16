@@ -36,6 +36,8 @@ body {
   text-stroke: 1px black; */
   font-weight: 10;
   line-height: 1;
+  letter-spacing: -0.5rem;
+  margin-left: -0.5rem; /* to counteract the letter-spacing */
 }
 
 .num-monospace {

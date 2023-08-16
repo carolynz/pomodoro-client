@@ -303,8 +303,8 @@ export default function Home() {
         ) : (
           // TODO: refactor into timer component?
           <>
-            <div className="flex text-[50vw] sm:text-[16rem] md:text-[20vw] lg:text-[20rem] flex-col md:flex-row justify-center items-center w-full align-center text-black">
-              <div className="time md:w-1/3 text-center pb-4 md:pb-0 num-monospace">
+            <div className="flex text-[40vw] sm:text-[16rem] md:text-[20vw] lg:text-[20rem] flex-col md:flex-row justify-center items-center w-full align-center text-black">
+              <div className="time md:w-1/3 text-center pb-[4vh] sm:pb-4 md:pb-0 num-monospace">
                 {minutesPadded}
               </div>
               <div className="w-full md:w-1/3 md:max-w-[20vw] lg:max-w-[300px] flex justify-center">
@@ -316,7 +316,7 @@ export default function Home() {
                   className="w-1/2 md:w-full max-w-[300px] pb-[20px] lg:pb-[50px] -mt-20 -mb-20 md:mt-0 md:mb-0 z-10 object-cover"
                 />
               </div>
-              <div className="time md:w-1/3 text-center pt-4 md:pt-0 num-monospace">
+              <div className="time md:w-1/3 text-center pt-[4vh] sm:pt-4 md:pt-0 num-monospace">
                 {secondsPadded}
               </div>
             </div>
