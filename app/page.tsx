@@ -165,7 +165,7 @@ export default function Home() {
       </Head>
       <main className="flex w-screen h-screen flex-col items-center justify-between p-4">
         {/* TODO: need to have some sort of loading state */}
-        <div className="text-2xl font-bold mb-6">pomo.chat</div>
+        <div className="text-2xl font-bold mb-6 text-black">pomo.chat</div>
 
         {chatOpen ? (
           // TODO: refactor into chat component?
@@ -241,10 +241,10 @@ export default function Home() {
               />
             </div>
             <div className="flex text-[50vw] sm:text-[20rem] flex-col md:flex-row justify-center items-center w-full align-center">
-              <div className="time flex-1 text-center pb-10 md:pb-0 md:pr-32">
+              <div className="time flex-1 text-center pb-4 md:pb-0 md:pr-32">
                 {minutesPadded}
               </div>
-              <div className="time flex-1 text-center pt-12 md:pt-0 md:pl-32">
+              <div className="time flex-1 text-center pt-4 md:pt-0 md:pl-32">
                 {secondsPadded}
               </div>
             </div>
