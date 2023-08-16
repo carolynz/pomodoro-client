@@ -58,7 +58,7 @@ export default function Home() {
       }
       // if in pomodoro period
       setChatOpen(false);
-      // FOR WORKING DEBUG ONLY:
+      // UNCOMMENT THE BELOW LINE FOR WORKING DEBUG ONLY:
       // setChatOpen(true);
       setCountdown(workPeriod - currentCycleTime);
     } else {
@@ -87,7 +87,8 @@ export default function Home() {
 
   // CHAT + WEBSOCKETS LOGIC
   const [chatOpen, setChatOpen] = useState(false);
-  const [name, setName] = useState("default");
+  const [name, setName] = useState<string | null>(null);
+  const [nameField, setNameField] = useState<string>("");
   const [messages, setMessages] = useState<Array<Message>>([]);
   const [myMessage, setMyMessage] = useState("");
   const [numberOnline, setNumberOnline] = useState(1);
@@ -128,27 +129,34 @@ export default function Home() {
   };
 
   const sendMessage = async () => {
-    socket.emit("createdMessage", { author: name, message: myMessage });
-    setMessages((currentMsg) => [
-      ...currentMsg,
-      { author: name, message: myMessage },
-    ]);
-    setMyMessage("");
+    if (name) {
+      socket.emit("createdMessage", { author: name, message: myMessage });
+
+      setMessages((currentMsg) => [
+        ...currentMsg,
+        { author: name, message: myMessage },
+      ]);
+      setMyMessage("");
+    }
   };
 
-  const handleKeypress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleMessageKeypress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     //it triggers by pressing the enter key
-    if (e.key === "Enter") {
-      if (myMessage) {
-        sendMessage();
-      }
+    if (e.key === "Enter" && myMessage) {
+      sendMessage();
+    }
+  };
+
+  const handleNameKeypress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && nameField.length > 0) {
+      setName(nameField);
     }
   };
 
   return (
     <main className="flex w-screen h-screen flex-col items-center justify-between p-4">
       {/* TODO: need to have some sort of loading state */}
-      <div className="text-xl font-bold mb-6">pomo.chat</div>
+      <div className="text-2xl font-bold mb-6">pomo.chat</div>
 
       {chatOpen ? (
         // TODO: refactor into chat component?
@@ -170,14 +178,33 @@ export default function Home() {
               })}
             </div>
             <div className="w-full">
-              <input
-                type="text"
-                placeholder="New message..."
-                value={myMessage}
-                className="outline p-4 text-slate-900 w-full bg-transparent rounded-xl"
-                onChange={(e) => setMyMessage(e.target.value)}
-                onKeyUp={handleKeypress}
-              />
+              {name ? (
+                // if user has name, let them input message
+                // TODO: add message filtering
+                <input
+                  type="text"
+                  placeholder="New message..."
+                  value={myMessage}
+                  className="outline p-4 text-slate-900 w-full bg-transparent rounded-xl"
+                  onChange={(e) => setMyMessage(e.target.value)}
+                  onKeyUp={handleMessageKeypress}
+                />
+              ) : (
+                // if user has not set name, cannot input message — must enter name first
+                // TODO: add name error handling
+                <>
+                  <input
+                    type="text"
+                    placeholder="Enter your name to join the chat"
+                    value={nameField}
+                    className="p-4 outline focus:outline-2 focus:outline-slate-400 focus:outline-offset-4
+                    
+                     text-slate-900 w-full bg-transparent rounded-xl"
+                    onChange={(e) => setNameField(e.target.value)}
+                    onKeyUp={handleNameKeypress}
+                  />
+                </>
+              )}
             </div>
           </div>
         </>
@@ -201,7 +228,7 @@ export default function Home() {
               height="auto"
               src="/images/tomato.png"
               alt="watercolor illustration of a tomato"
-              style={{ "max-width": "300px" }}
+              className="max-w-[300px] pb-[20px] md:pb-[50px]"
             />
           </div>
           <div className="flex text-[50vw] sm:text-[20rem] flex-col md:flex-row justify-center items-center w-full align-center">
@@ -214,9 +241,25 @@ export default function Home() {
           </div>
         </>
       )}
+      {/* if user has not entered name, include persistent floating prompt to enter name */}
+
+      {/* {!name && (
+        <>
+          <div className="absolute bottom-20 w-[400px]">
+            <input
+              type="text"
+              placeholder="enter your name to join the chat"
+              value={nameField}
+              className="outline p-4 text-slate-900 w-full bg-transparent rounded-xl"
+              onChange={(e) => setNameField(e.target.value)}
+              onKeyUp={handleNameKeypress}
+            />
+          </div>
+        </>
+      )} */}
       <div className="flex flex-row space-x-1 items-center mt-6">
         <div className="w-2 h-2 bg-green-600 rounded-full" />
-        <p className="text-xs">{numberOnline} here</p>
+        <p className="text-lg font-light">{numberOnline} online</p>
       </div>
     </main>
   );

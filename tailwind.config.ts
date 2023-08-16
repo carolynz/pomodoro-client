@@ -9,10 +9,10 @@ const config: Config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    colors: {
-      cream: "#FAF0DF",
-    },
     extend: {
+      colors: {
+        cream: "#FAF0DF",
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
