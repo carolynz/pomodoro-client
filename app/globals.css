@@ -31,13 +31,13 @@ body {
     1px 1px 0 #000;
   @apply text-cream;
   /* note: cannot use this soln because it strokes the paths of the variable fonts */
-  /* -webkit-text-fill-color: #FAF0DF;
+  /* -webkit-text-fill-color: #faf0df;
   -webkit-text-stroke: 1px black;
   text-stroke: 1px black; */
   font-weight: 10;
   line-height: 1;
   letter-spacing: -0.5rem;
-  margin-left: -0.5rem; /* to counteract the letter-spacing */
+  margin-left: -0.5rem; /*to counteract the letter-spacing*/
 }
 
 .num-monospace {

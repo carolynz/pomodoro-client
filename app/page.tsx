@@ -50,8 +50,8 @@ export default function Home() {
   }, []);
 
   //  POMODORO LOGIC
-  const [countdown, setCountdown] = useState(0); //  figure out what number / way to store this — we will think about it later :))))
-  const [currentPeriod, setCurrentPeriod] = useState(0);
+  const [minutesPadded, setMinutesPadded] = useState("00");
+  const [secondsPadded, setSecondsPadded] = useState("00");
 
   const workPeriod = 25 * 60 * 1000; // 25 minutes in milliseconds
   const breakPeriod = 5 * 60 * 1000; // 5 minutes in milliseconds
@@ -63,46 +63,67 @@ export default function Home() {
   const playTimerSound = () => {
     const audio = new Audio("/sounds/timer.mp3");
     audio.play();
-    console.log("playing sound");
+    // console.log("playing sound");
+  };
+
+  // Sets the page title to the current countdown
+  const setTitle = (chat: boolean, minutes: string, seconds: string) => {
+    document.title = `${chat ? "💬" : "🍅"} ${minutes}:${seconds}`;
   };
 
   const updatePomodoroState = () => {
     const currentTime = new Date().getTime();
+    // reference time is midnight of current day
     const timeSinceReference = currentTime - referenceTime.getTime();
+    // currentCycleTime is the time past :00 or :30 of the hour
+    // fullCycle is 30min
     const currentCycleTime = timeSinceReference % fullCycle;
+    let countdown;
+    let newChatOpen;
 
     if (currentCycleTime < workPeriod) {
-      if (chatOpen) {
-        // if chat was previously open and now we are switching back to pomodoro — play a sound. this is just for testing purposes
-        // playTimerSound();
-      }
-      // if in pomodoro period
-      setChatOpen(false);
-      // UNCOMMENT THE BELOW LINE FOR WORKING DEBUG ONLY:
-      // setChatOpen(true);
-      setCountdown(workPeriod - currentCycleTime);
+      // if in minute 0 to 25 of the hour — work period, chat is closed
+      newChatOpen = false;
+      countdown = workPeriod - currentCycleTime; // 0 to 25 minutes
+
+      // TODO: logic for timer sound
     } else {
-      // if in break period
-      if (!chatOpen) {
-        // if chat was previously closed, and now we are switching to open — play a timer sound
-        // playTimerSound();
-      }
-      setChatOpen(true);
-      setCountdown(fullCycle - currentCycleTime);
+      // if in minute 25 to 30 of the hour — break period, chat is open
+      newChatOpen = true;
+
+      countdown = fullCycle - currentCycleTime; // 0 to 5 minutes
+
+      // TODO: logic for timer sound
     }
+
+    // time formatting
+    const minutes = Math.floor(countdown / (60 * 1000));
+    const seconds = Math.floor((countdown % (60 * 1000)) / 1000);
+    const newMinutesPadded = String(minutes).padStart(2, "0");
+    const newSecondsPadded = String(seconds).padStart(2, "0");
+    setMinutesPadded(newMinutesPadded);
+    setSecondsPadded(newSecondsPadded);
+
+    setChatOpen(newChatOpen);
+    // UNCOMMENT THE BELOW LINE FOR WORKING DEBUG ONLY:
+    // setChatOpen(true);
+
+    // Call setTitle after countdown and minutes/seconds have been updated
+    setTitle(newChatOpen, newMinutesPadded, newSecondsPadded);
   };
 
   // Updates pomodoro timer every second
   useEffect(() => {
     const interval = setInterval(updatePomodoroState, 1000);
+
     return () => clearInterval(interval);
   }, []);
 
-  const minutes = Math.floor(countdown / (60 * 1000));
-  const seconds = Math.floor((countdown % (60 * 1000)) / 1000);
-  // pad the min/sec with a leading zero if necessary
-  const minutesPadded = String(minutes).padStart(2, "0");
-  const secondsPadded = String(seconds).padStart(2, "0");
+  // const minutes = Math.floor(countdown / (60 * 1000));
+  // const seconds = Math.floor((countdown % (60 * 1000)) / 1000);
+  // // pad the min/sec with a leading zero if necessary
+  // const minutesPadded = String(minutes).padStart(2, "0");
+  // const secondsPadded = String(seconds).padStart(2, "0");
 
   // CHAT + WEBSOCKETS LOGIC
 
@@ -117,11 +138,9 @@ export default function Home() {
   useEffect(() => {
     const socketInitializer = () => {
       socket = io("https://pomodoro-server-o0a9.onrender.com");
-      console.log("new socket:", socket);
-
       // when receiving new message, add to message history
       socket.on("newIncomingMessage", (msg) => {
-        console.log("incoming message: ", msg);
+        // console.log("incoming message: ", msg);
         setMessages((currentMsg) => [
           ...currentMsg,
           { author: msg.author, message: msg.message },
@@ -130,7 +149,7 @@ export default function Home() {
 
       // when more people join, add count
       socket.on("updateClientCount", (count) => {
-        console.log("new online count: ", count);
+        // console.log("new online count: ", count);
         setNumberOnline(count);
       });
     };
@@ -140,7 +159,7 @@ export default function Home() {
     // prevents cases like re-renders leading to "58 people online"
     return () => {
       if (socket) {
-        console.log("disconnecting websocket");
+        // console.log("disconnecting websocket");
         socket.disconnect();
       }
     };
