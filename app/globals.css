@@ -52,7 +52,7 @@ body {
   }
   .time {
     width: 33vw;
-    font-size: 20vw;
+    font-size: max(20vw, 300px);
   }
   .tomato {
     width: 20vw;
