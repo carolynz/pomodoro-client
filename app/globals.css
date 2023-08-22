@@ -43,3 +43,38 @@ body {
 .num-monospace {
   font-variant-numeric: tabular-nums lining-nums;
 }
+
+/* landscape */
+@media (min-aspect-ratio: 1/1) {
+  .timer-container {
+    display: flex;
+    flex-direction: row;
+  }
+  .time {
+    width: 33vw;
+    font-size: 20vw;
+  }
+  .tomato {
+    width: 20vw;
+    max-width: 300px;
+    margin-bottom: 3%;
+  }
+}
+
+/* portrait */
+@media (max-aspect-ratio: 1/1) {
+  .timer-container {
+    display: flex;
+    flex-direction: column;
+  }
+  .time {
+    width: 100%;
+    font-size: 20vh;
+  }
+  .tomato {
+    width: 20vh;
+    max-width: 300px;
+  }
+}
+
+/* final max/mins at different widths */
