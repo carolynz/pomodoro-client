@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import MessageList from "@/components/MessageList";
 import { db } from "@/utils/firebase";
-import { ref, push } from "firebase/database";
+import { ref, push, onValue, set, onDisconnect } from "firebase/database";
 
 type Message = {
   author: string;
@@ -33,10 +33,38 @@ export default function Timer() {
     return () => window.removeEventListener("resize", setContainerHeight);
   }, []);
 
-  //  POMODORO LOGIC
+  // # ONLINE LOGIC
+  const connectionsRef = ref(db, "connections");
+  const connectedRef = ref(db, ".info/connected");
+  const [numberOnline, setNumberOnline] = useState(1);
+
+  useEffect(() => {
+    console.log("in useEffect to get number of online users");
+
+    // add a listener to the # of people online (# items in connections)
+    const handleValueChange = onValue(connectionsRef, (snap) => {
+      setNumberOnline(snap.size);
+    });
+
+    // Handle the current user's connection status
+    onValue(connectedRef, (snap) => {
+      // if client is currently connected
+      if (snap.val() === true) {
+        const con = push(connectionsRef); //creates a new child node under connections with a unique ID
+        set(con, true); // sets the value of this new child node to true, effectively marking a new user as online.
+        onDisconnect(con).remove(); //when the client disconnects, the child node we just created is removed from the database.
+      }
+    });
+
+    // Cleanup the listeners on unmount
+    return () => {
+      handleValueChange();
+    };
+  }, []);
+
+  // POMODORO LOGIC
   const [chatOpen, setChatOpen] = useState(false);
   const [prevChatOpen, setPrevChatOpen] = useState<boolean>(false);
-
   const [minutesPadded, setMinutesPadded] = useState("00");
   const [secondsPadded, setSecondsPadded] = useState("00");
 
@@ -46,8 +74,6 @@ export default function Timer() {
 
   const referenceTime = new Date(); // you can set this to any reference time
   referenceTime.setHours(0, 0, 0, 0); // set to midnight of the current day, for example
-
-  const [chatroomId, setChatroomId] = useState<string>(""); // TODO: determine chatroom ID based on current datetime
 
   const getChatroomId = () => {
     const date = new Date();
@@ -70,6 +96,7 @@ export default function Timer() {
     document.title = `${chat ? "💬" : "🍅"} ${minutes}:${seconds}`;
   };
 
+  // manages timer & chatOpen state
   const updatePomodoroState = () => {
     const currentTime = new Date().getTime();
     // reference time is midnight of current day
@@ -80,6 +107,11 @@ export default function Timer() {
 
     let countdown;
     let newChatOpen;
+
+    // updates the chatroomId within the first 2 seconds of the half-hour cycle
+    if (currentCycleTime < 2000) {
+      setChatroomId(getChatroomId());
+    }
 
     if (currentCycleTime < workPeriod) {
       // if in minute 0 to 25 of the hour — work period, chat is closed
@@ -99,15 +131,15 @@ export default function Timer() {
     setMinutesPadded(newMinutesPadded);
     setSecondsPadded(newSecondsPadded);
 
-    // setChatOpen(newChatOpen);
+    setChatOpen(newChatOpen);
     // UNCOMMENT THE BELOW LINE FOR WORKING DEBUG ONLY:
-    setChatOpen(true);
+    // setChatOpen(true);
 
     // Call setTitle after countdown and minutes/seconds have been updated
     setTitle(newChatOpen, newMinutesPadded, newSecondsPadded);
   };
 
-  // Updates pomodoro timer every second
+  // Check for state updates/timer updates every second
   useEffect(() => {
     const interval = setInterval(updatePomodoroState, 1000);
     console.log("new useEffect");
@@ -128,14 +160,36 @@ export default function Timer() {
   const [nameField, setNameField] = useState<string>("");
   const [messages, setMessages] = useState<Array<Message>>([]);
   const [myMessage, setMyMessage] = useState("");
-  const [numberOnline, setNumberOnline] = useState(1);
 
-  // TODO: function to get message history for current chatroom
-  // TODO: how do I get the chatroom ID for the current time? maybe just something like YYYY-MM-DD-HH-[#1 or 2]?
+  const [chatroomId, setChatroomId] = useState<string>(getChatroomId());
 
+  const loadChatHistory = (chatroomId: string) => {
+    const chatroomRef = ref(db, `chatrooms/${chatroomId}`);
+
+    // return the function so useEffect can detach it on unmount
+    const unsubscribe = onValue(chatroomRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const loadedMessages: Message[] = Object.values(data);
+        setMessages(loadedMessages);
+      } else {
+        setMessages([]);
+      }
+    });
+
+    return unsubscribe;
+  };
+
+  // load past chats when component loads
+  useEffect(() => {
+    const unsubscribe = loadChatHistory(chatroomId);
+
+    return () => {
+      unsubscribe();
+    };
+  }, [chatroomId]);
   const sendMessage = async () => {
     if (name && myMessage) {
-      const chatroomId = getChatroomId();
       const timestamp = new Date().toISOString();
 
       const messageObj = {
@@ -147,7 +201,6 @@ export default function Timer() {
       const chatroomRef = ref(db, `chatrooms/${chatroomId}`);
       await push(chatroomRef, messageObj);
 
-      setMessages((currentMsg) => [...currentMsg, messageObj]);
       setMyMessage("");
     }
   };
