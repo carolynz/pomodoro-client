@@ -30,12 +30,12 @@ export default function RootLayout({
           content="social pomodoro timer · 25 minutes of focus + 5 minutes of chat"
         />
         <meta property="og:url" content="https://pomo.chat" />
-        <meta property="og:image" content="/images/link-preview.png" />
+        {/* <meta property="og:image" content="/images/link-preview.png" />
         <meta
           property="og:image:secure_url"
           content="/images/link-preview.png"
         />
-        <meta name="thumbnail" content="/images/link-preview.png" />
+        <meta name="thumbnail" content="/images/link-preview.png" /> */}
 
         {/* on favicon declarations:
          https://loqbooq.app/blog/add-favicon-modern-browser-guide */}
