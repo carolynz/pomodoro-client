@@ -54,7 +54,7 @@ export default function MessageList({ messages }: props) {
           return (
             <div className="w-full py-2" key={i}>
               <p className="text-slate-500">{msg.author}</p>
-              <p className="text-slate-900">{msg.message}</p>
+              <p className="text-ink">{msg.message}</p>
             </div>
           );
         })}

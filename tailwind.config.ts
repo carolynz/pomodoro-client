@@ -9,9 +9,16 @@ const config: Config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    screens: {
+      xs: "375px",
+      ...defaultTheme.screens,
+    },
     extend: {
       colors: {
         cream: "#FAF0DF",
+        tomato: "#F4371A",
+        olive: "#57664C",
+        ink: "#141414",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

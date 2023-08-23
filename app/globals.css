@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+/* :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
@@ -14,11 +14,11 @@
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0;
   }
-}
+} */
 
 body {
   color: rgb(var(--foreground-rgb));
-  @apply bg-cream;
+  @apply bg-cream text-ink;
 }
 
 .main-container {
@@ -27,8 +27,8 @@ body {
   height: 100vh;
 }
 .time {
-  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
-    1px 1px 0 #000;
+  text-shadow: -1px -1px 0 #141414, 1px -1px 0 #141414, -1px 1px 0 #141414,
+    1px 1px 0 #141414;
   @apply text-cream;
   /* note: cannot use this soln because it strokes the paths of the variable fonts */
   /* -webkit-text-fill-color: #faf0df;
@@ -42,6 +42,23 @@ body {
 
 .num-monospace {
   font-variant-numeric: tabular-nums lining-nums;
+}
+
+.landing-name {
+  font-size: min(20vw, 250px);
+  line-height: 0.75;
+  font-weight: 900;
+  display: flex;
+  margin: 4rem 0;
+}
+
+/* default landing layout — horizontal */
+.landing-tomato {
+  width: 30vw;
+  max-width: 300px;
+}
+.landing-name {
+  flex-direction: row;
 }
 
 /* landscape */
@@ -76,5 +93,3 @@ body {
     max-width: 300px;
   }
 }
-
-/* final max/mins at different widths */
