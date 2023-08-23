@@ -2,37 +2,19 @@
 
 import Image from "next/image";
 import { useEffect, useState, useRef } from "react";
-import { io, Socket } from "socket.io-client";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
-
 import MessageList from "@/components/MessageList";
-
-// do we need this line?
-let socket: Socket;
+import { db } from "@/utils/firebase";
+import { ref, push } from "firebase/database";
 
 type Message = {
   author: string;
   message: string;
+  sentAt: string;
 };
 
 export default function Timer() {
-  /* functionality!
-/ 1. global pomodoro time:
-  - see how many people are online
-  - everyone is on same clock
-    - 12:00 - 12:25 you can't talk to anyone
-    - 12:25 - 12:30 you can chat in global chat
-    - 12:30 - 12:55 you can't talk to anyone
-    - 12:55 - 1:00 you can chat in global chat
-  2. chat functionality
-    - normal global chat
-    - enter name in order to chat, but you don't need to enter name in order to use the pomodoro timer
-      - TBD, MIGHT CHANGE ORDER OF NAME-ASKING  
-    - not stored after the 5 minute mark is up
-    
-*/
-
   // mobile layout — avoid browser bar covering screen
   useEffect(() => {
     const setContainerHeight = () => {
@@ -64,6 +46,18 @@ export default function Timer() {
 
   const referenceTime = new Date(); // you can set this to any reference time
   referenceTime.setHours(0, 0, 0, 0); // set to midnight of the current day, for example
+
+  const [chatroomId, setChatroomId] = useState<string>(""); // TODO: determine chatroom ID based on current datetime
+
+  const getChatroomId = () => {
+    const date = new Date();
+    const hour = date.getUTCHours();
+    // Assuming your cycle is 30 minutes, periods are 0-29 and 30-59 minutes past the hour
+    const halfHourPeriod = date.getUTCMinutes() < 30 ? 1 : 2;
+    return `${date.getUTCFullYear()}-${
+      date.getUTCMonth() + 1
+    }-${date.getUTCDate()}-${hour}-${halfHourPeriod}`;
+  };
 
   const playTimerSound = () => {
     const audio = new Audio("/sounds/timer.mp3");
@@ -105,9 +99,9 @@ export default function Timer() {
     setMinutesPadded(newMinutesPadded);
     setSecondsPadded(newSecondsPadded);
 
-    setChatOpen(newChatOpen);
+    // setChatOpen(newChatOpen);
     // UNCOMMENT THE BELOW LINE FOR WORKING DEBUG ONLY:
-    // setChatOpen(true);
+    setChatOpen(true);
 
     // Call setTitle after countdown and minutes/seconds have been updated
     setTitle(newChatOpen, newMinutesPadded, newSecondsPadded);
@@ -120,7 +114,7 @@ export default function Timer() {
     return () => clearInterval(interval);
   }, []);
 
-  // plays timer sound whenever chat opens
+  // TODO: plays timer sound whenever chat opens
   // useEffect(() => {
   //   if (prevChatOpen === false && chatOpen === true) {
   //     // playTimerSound();
@@ -129,52 +123,31 @@ export default function Timer() {
   //   setPrevChatOpen(chatOpen);
   // }, [chatOpen]);
 
-  // CHAT + WEBSOCKETS LOGIC
+  // CHAT LOGIC
   const [name, setName] = useState<string | null>(null);
   const [nameField, setNameField] = useState<string>("");
   const [messages, setMessages] = useState<Array<Message>>([]);
   const [myMessage, setMyMessage] = useState("");
   const [numberOnline, setNumberOnline] = useState(1);
 
-  // set up socket connection
-  useEffect(() => {
-    const socketInitializer = () => {
-      socket = io("https://pomodoro-server-o0a9.onrender.com");
-      // when receiving new message, add to message history
-      socket.on("newIncomingMessage", (msg) => {
-        // console.log("incoming message: ", msg);
-        setMessages((currentMsg) => [
-          ...currentMsg,
-          { author: msg.author, message: msg.message },
-        ]);
-      });
-
-      // when more people join, add count
-      socket.on("updateClientCount", (count) => {
-        // console.log("new online count: ", count);
-        setNumberOnline(count);
-      });
-    };
-    socketInitializer();
-
-    // Cleanup: Disconnect the socket when the component is unmounted
-    // prevents cases like re-renders leading to "58 people online"
-    return () => {
-      if (socket) {
-        // console.log("disconnecting websocket");
-        socket.disconnect();
-      }
-    };
-  }, []);
+  // TODO: function to get message history for current chatroom
+  // TODO: how do I get the chatroom ID for the current time? maybe just something like YYYY-MM-DD-HH-[#1 or 2]?
 
   const sendMessage = async () => {
-    if (name) {
-      socket.emit("createdMessage", { author: name, message: myMessage });
+    if (name && myMessage) {
+      const chatroomId = getChatroomId();
+      const timestamp = new Date().toISOString();
 
-      setMessages((currentMsg) => [
-        ...currentMsg,
-        { author: name, message: myMessage },
-      ]);
+      const messageObj = {
+        author: name,
+        message: myMessage,
+        sentAt: timestamp,
+      };
+
+      const chatroomRef = ref(db, `chatrooms/${chatroomId}`);
+      await push(chatroomRef, messageObj);
+
+      setMessages((currentMsg) => [...currentMsg, messageObj]);
       setMyMessage("");
     }
   };
