@@ -24,11 +24,8 @@ export default function RootLayout({
     <html lang="en">
       <Head>
         <title>🍅 pomo.chat 💬</title>
-        <meta property="og:title" content="pomo.chat" />
-        <meta
-          property="og:description"
-          content="social pomodoro timer · 25 min focus + 5 min chat"
-        />
+        <meta property="og:title" content="social pomodoro timer" />
+        <meta property="og:description" content="25 min focus + 5 min chat" />
         <meta property="og:url" content="https://pomo.chat" />
         <meta property="og:type" content="website" />
         {/* note: favicon, link preview images handled by app router */}
