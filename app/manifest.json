@@ -1,0 +1,6 @@
+{
+  "name": "pomo.chat",
+  "short_name": "pomo.chat",
+  "description": "social pomodoro timer · 25 min focus + 5 min chat",
+  "start_url": "/"
+}
