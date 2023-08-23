@@ -27,7 +27,7 @@ export default function RootLayout({
         <meta property="og:title" content="pomo.chat" />
         <meta
           property="og:description"
-          content="social pomodoro timer · 25 minutes of focus + 5 minutes of chat"
+          content="social pomodoro timer · 25 min focus + 5 min chat"
         />
         <meta property="og:url" content="https://pomo.chat" />
         {/* <meta property="og:image" content="/images/link-preview.png" />
