@@ -98,7 +98,11 @@ export default function Timer() {
 
   // manages timer & chatOpen state
   const updatePomodoroState = () => {
-    const currentTime = new Date().getTime();
+    const date = new Date();
+    const currentTime = date.getTime();
+    const currentMinutes = date.getMinutes();
+    const currentSeconds = date.getSeconds();
+
     // reference time is midnight of current day
     const timeSinceReference = currentTime - referenceTime.getTime();
     // currentCycleTime is the time past :00 or :30 of the hour
@@ -111,6 +115,19 @@ export default function Timer() {
     // updates the chatroomId within the first 2 seconds of the half-hour cycle
     if (currentCycleTime < 2000) {
       setChatroomId(getChatroomId());
+    }
+
+    // plays sound at the appropriate times
+    if (currentSeconds === 0) {
+      // Check if it's the start of a new minute
+      if (
+        currentMinutes === 0 ||
+        currentMinutes === 25 ||
+        currentMinutes === 30 ||
+        currentMinutes === 55
+      ) {
+        playTimerSound();
+      }
     }
 
     if (currentCycleTime < workPeriod) {
