@@ -8,14 +8,20 @@ import Timer from "@/components/Timer";
 import Chat from "@/components/Chat";
 
 export default function Home() {
-  const [name, setName] = useState<string>("");
-  // const [nameField, setNameField] = useState<string>("");
-  const [nameField, setNameField] = useState<string>(
-    localStorage.getItem("name") || ""
-  );
+  // Basic app states
+  const [chatOpen, setChatOpen] = useState(false); // if chatOpen = true, user is in chat
+  const [appOpen, setAppOpen] = useState(false); // if appOpen = true, user has entered name and is in the pomo/chat
 
-  const [chatOpen, setChatOpen] = useState(false);
-  const [appOpen, setAppOpen] = useState(false);
+  // user name
+  const [name, setName] = useState<string>("");
+  const [nameField, setNameField] = useState<string>("");
+  // Prefill user name from localStorage
+  useEffect(() => {
+    const savedName = localStorage.getItem("name");
+    if (savedName) {
+      setNameField(savedName);
+    }
+  }, []);
 
   // "cycle" = 30 minute unit for the whole app logic
   // each hour has 2 cycles, which starts at :00 and :30 (UTC time)
