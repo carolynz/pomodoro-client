@@ -117,25 +117,26 @@ export default function Home() {
         p-4 text-ink text-center"
         style={{ height: "calc(var(--vh, 1vh) * 100)" }}
       >
+        <Header />
         {appOpen ? (
           chatOpen ? (
             <>
-              <Header />
               <Chat name={name} />
             </>
           ) : (
             <>
-              <Header />
               <Timer minutes={minutesPadded} seconds={secondsPadded} />
             </>
           )
         ) : (
-          <Landing
-            nameField={nameField}
-            setNameField={setNameField}
-            setName={setName}
-            setAppOpen={setAppOpen}
-          />
+          <>
+            <Landing
+              nameField={nameField}
+              setNameField={setNameField}
+              setName={setName}
+              setAppOpen={setAppOpen}
+            />
+          </>
         )}
 
         <Footer />

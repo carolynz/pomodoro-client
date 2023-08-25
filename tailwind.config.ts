@@ -16,7 +16,8 @@ const config: Config = {
     extend: {
       colors: {
         cream: "#FAF0DF",
-        tomato: "#F4371A",
+        // tomato: "#F4371A",
+        tomato: "#F9482E",
         olive: "#57664C",
         ink: "#141414",
       },

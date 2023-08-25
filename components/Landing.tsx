@@ -26,45 +26,37 @@ const Landing: React.FC<Props> = ({
   return (
     <>
       <div className="grow flex flex-col items-center justify-center">
-        <div className="title-container relative flex items-center justify-center px-4">
-          <img
-            // width="100%"
-            // height="auto"
-            src="/images/tomato.png"
-            alt="watercolor illustration of a tomato"
-            className="absolute z-10 landing-tomato"
-          />
-          <h1 className="landing-name z-20">
-            <span>pomo</span>
-            <span>.chat</span>
-          </h1>
-        </div>
-        <div className="subtitle-container mt-4 md:mt-20 mb-4 text-center">
+        <div className="subtitle-container mb-4 text-center">
           <p>a social pomodoro timer</p>
           <p>25 minutes of focus · 5 minutes of chat</p>
         </div>
-        <div className="nameinput-container max-w-[300px]">
+        <div className="nameinput-container relative max-w-[300px]">
           <input
             type="text"
-            placeholder="give yourself a name"
+            placeholder="name"
             value={nameField}
-            className="w-full p-4 outline outline-ink
-             focus:outline-2
-                  
-                    text-ink w-full bg-transparent rounded-xl"
+            className="w-full py-16 pt-32 outline outline-ink
+             focus:outline-4 placeholder:text-ink/30
+             text-ink text-4xl text-center font-thin bg-transparent rounded-3xl"
             onChange={(e) => setNameField(e.target.value)}
             onKeyUp={handleNameKeypress}
           />
+          <div
+            className="absolute top-0 w-full
+          flex items-center justify-center
+          p-6 bg-tomato text-cream rounded-tr-3xl rounded-tl-3xl"
+          >
+            hi~ my name is
+          </div>
+
           <button
             onClick={submitName}
-            className="bg-ink text-cream rounded-full px-10 py-4 my-4
+            className="bg-ink outline outline-ink text-cream rounded-full px-10 py-4 my-4
             hover:bg-tomato transition-all w-full"
           >
             enter
           </button>
         </div>
-
-        <NumberOnline />
       </div>
     </>
   );
