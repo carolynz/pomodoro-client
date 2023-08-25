@@ -10,12 +10,6 @@ const TimerPage: React.FC<Props> = ({ minutes, seconds }) => {
       <div className="timer-container justify-center items-center w-full align-center text-ink">
         <div className="time text-center num-monospace">{minutes}</div>
         <div className="tomato w-full flex justify-center">
-          {/* <img
-            width="100%"
-            height="auto"
-            src="/images/tomato.png"
-            alt="watercolor illustration of a tomato"
-          /> */}
           <Image
             width={300} // will be overridden by css
             height={300} //will be overridden by css

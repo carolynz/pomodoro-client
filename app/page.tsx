@@ -123,7 +123,12 @@ export default function Home() {
         p-4 text-ink text-center"
         style={{ height: "calc(var(--vh, 1vh) * 100)" }}
       >
-        <Header />
+        <Header
+          appOpen={appOpen}
+          chatOpen={chatOpen}
+          minutes={minutesPadded}
+          seconds={secondsPadded}
+        />
         {appOpen ? (
           chatOpen ? (
             <>

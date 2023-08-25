@@ -79,20 +79,29 @@ const Chat: React.FC<Props> = ({ name }) => {
 
   return (
     <>
-      <div className="relative flex flex-col justify-end min-w-[300px] max-w-[600px] w-full h-[70vh] bg-white rounded-xl my-4">
+      <div
+        className="relative flex flex-col justify-end
+      min-w-[300px] max-w-[600px] w-full h-[70vh]
+      bg-transparent outline outline-ink rounded-xl my-4
+      text-xl"
+      >
         {/* chat body */}
         <MessageList messages={messages} />
 
         {/* msg input */}
-        <div className="w-full ">
+        <div className="w-full relative ">
           <input
             type="text"
             placeholder="new message..."
             value={myMessage}
-            className="outline p-4 text-ink w-full bg-transparent rounded-xl"
+            className="outline outline-ink focus:outline-ink
+            w-full p-4 pr-40
+            text-ink placeholder:text-ink/30
+            bg-transparent rounded-br-xl rounded-bl-xl"
             onChange={(e) => setMyMessage(e.target.value)}
             onKeyUp={handleMessageKeypress}
           />
+          <button className="absolute right-0"></button>
         </div>
       </div>
     </>
