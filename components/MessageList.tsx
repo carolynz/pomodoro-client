@@ -49,7 +49,10 @@ export default function MessageList({ messages }: props) {
   }, [messages, showScrollToBottomPill]);
   return (
     <>
-      <div ref={messageListRef} className="h-full px-4 overflow-y-scroll">
+      <div
+        ref={messageListRef}
+        className="text-left h-full px-4 overflow-y-scroll"
+      >
         {messages.map((msg, i) => {
           return (
             <div className="w-full py-2" key={i}>
