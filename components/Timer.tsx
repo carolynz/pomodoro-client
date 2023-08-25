@@ -16,6 +16,7 @@ const TimerPage: React.FC<Props> = ({ minutes, seconds }) => {
             className="w-auto h-auto"
             src="/images/tomato.png"
             alt="watercolor illustration of a tomato"
+            priority={true}
           />
         </div>
         <div className="time text-center num-monospace">{seconds}</div>
