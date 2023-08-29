@@ -75,23 +75,23 @@ export default function Home() {
       timePassedInPartMillis = timePassedInCycleMillis % partTotalMillis;
       newChatOpen = true;
     }
-    console.log("currentSeconds", currentSeconds);
+    // console.log("currentSeconds", currentSeconds);
     // plays sounds when we switch btwn chat <> timer
     // doing it this way bc the state-change-based way was unreliable... at least for me...
     // also, only play sound when user is in the core app experience
-    console.log("appOpen?", appOpen);
-    if (currentSeconds === 0 && appOpen) {
+    // console.log("appOpen?", appOpen);
+    if (currentSeconds === 0) {
       // Check if it's the start of a new minute
       console.log("currentSeconds === 0");
-      playTimerSound();
-      // if (
-      //   currentMinutes === 0 ||
-      //   currentMinutes === 25 ||
-      //   currentMinutes === 30 ||
-      //   currentMinutes === 55
-      // ) {
-      //   playTimerSound();
-      // }
+      // playTimerSound();
+      if (
+        currentMinutes === 0 ||
+        currentMinutes === 25 ||
+        currentMinutes === 30 ||
+        currentMinutes === 55
+      ) {
+        playTimerSound();
+      }
     }
 
     // Determine the remaining time in the cycle by subtracting the elapsed time from the total time for that cycle
