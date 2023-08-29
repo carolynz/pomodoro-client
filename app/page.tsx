@@ -92,12 +92,8 @@ export default function Home() {
     // plays sounds when we switch btwn chat <> timer
     // doing it this way bc the state-change-based way was unreliable... at least for me...
     // also, only play sound when user is in the core app experience
-    // console.log("appOpen?", appOpen);
-    // console.log("appOpenRef.current?", appOpenRef.current);
     if (currentSeconds === 0 && appOpenRef.current) {
       // Check if it's the start of a new minute
-      // console.log("currentSeconds === 0");
-      // playTimerSound();
       if (
         currentMinutes === 0 ||
         currentMinutes === 25 ||
