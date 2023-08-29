@@ -8,6 +8,24 @@ import Timer from "@/components/Timer";
 import Chat from "@/components/Chat";
 
 export default function Home() {
+  // mobile layout — avoid browser bar covering screen
+  useEffect(() => {
+    const setContainerHeight = () => {
+      // Get the actual visible height
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty("--vh", `${vh}px`);
+    };
+
+    // Initial call
+    setContainerHeight();
+
+    // Listen for resizing events
+    window.addEventListener("resize", setContainerHeight);
+
+    // Cleanup
+    return () => window.removeEventListener("resize", setContainerHeight);
+  }, []);
+
   // Basic app states
   const [chatOpen, setChatOpen] = useState(false); // if chatOpen = true, user is in chat
   const [appOpen, setAppOpen] = useState(false); // if appOpen = true, user has entered name and is in the pomo/chat
