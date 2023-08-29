@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { db } from "@/utils/firebase";
 import { ref, push, onValue } from "firebase/database";
 import MessageList from "./MessageList";
+import { PaperAirplaneIcon } from "@heroicons/react/24/outline";
 
 type Message = {
   author: string;
@@ -86,22 +87,32 @@ const Chat: React.FC<Props> = ({ name }) => {
       text-xl"
       >
         {/* chat body */}
+        {/* <p className="text-sm">What did you do during the last pomodoro?</p> */}
         <MessageList messages={messages} />
 
         {/* msg input */}
         <div className="w-full relative ">
           <input
             type="text"
-            placeholder="new message..."
+            placeholder="what did you do during the last pomodoro?"
             value={myMessage}
             className="outline outline-ink focus:outline-ink
-            w-full p-4 pr-40
+            w-full p-4 pr-16
             text-ink placeholder:text-ink/30
             bg-transparent rounded-br-xl rounded-bl-xl"
             onChange={(e) => setMyMessage(e.target.value)}
             onKeyUp={handleMessageKeypress}
           />
-          <button className="absolute right-0"></button>
+          <button
+            className="absolute right-0 top-1/2 transform -translate-y-1/2
+            flex items-center justify-center p-3 mr-[5px] rounded-lg
+            bg-ink text-cream
+            disabled:bg-transparent disabled:text-ink/50"
+            onClick={sendMessage}
+            disabled={!myMessage}
+          >
+            <PaperAirplaneIcon className="w-6 h-6" />
+          </button>
         </div>
       </div>
     </>
