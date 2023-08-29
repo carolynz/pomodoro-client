@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import Landing from "@/components/Landing";
@@ -15,6 +15,19 @@ export default function Home() {
   // user name
   const [name, setName] = useState<string>("");
   const [nameField, setNameField] = useState<string>("");
+
+  // get most recent state of key state vars without triggering a rerender
+  // this is needed because we have a long-running setInterval for updatePomodoroState,
+  // which needs to access the most recent state of these vars
+  const appOpenRef = useRef(appOpen);
+  const chatOpenRef = useRef(chatOpen);
+  useEffect(() => {
+    appOpenRef.current = appOpen;
+  }, [appOpen]);
+  useEffect(() => {
+    chatOpenRef.current = chatOpen;
+  }, [chatOpen]);
+
   // Prefill user name from localStorage
   useEffect(() => {
     const savedName = localStorage.getItem("name");
@@ -75,15 +88,16 @@ export default function Home() {
       timePassedInPartMillis = timePassedInCycleMillis % partTotalMillis;
       newChatOpen = true;
     }
-    // console.log("currentSeconds", currentSeconds);
+    console.log("currentSeconds", currentSeconds);
     // plays sounds when we switch btwn chat <> timer
     // doing it this way bc the state-change-based way was unreliable... at least for me...
     // also, only play sound when user is in the core app experience
-    // console.log("appOpen?", appOpen);
-    if (currentSeconds === 0) {
+    console.log("appOpen?", appOpen);
+    console.log("appOpenRef.current?", appOpenRef.current);
+    if (currentSeconds === 0 && appOpenRef.current) {
       // Check if it's the start of a new minute
       console.log("currentSeconds === 0");
-      // playTimerSound();
+      playTimerSound();
       if (
         currentMinutes === 0 ||
         currentMinutes === 25 ||
