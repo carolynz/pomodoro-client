@@ -83,7 +83,7 @@ export default function Home() {
       // Check if it's the start of a new minute
       console.log("currentSeconds === 0");
       if (
-        currentMinutes === 15 ||
+        currentMinutes === 17 ||
         currentMinutes === 25 ||
         currentMinutes === 30 ||
         currentMinutes === 55
