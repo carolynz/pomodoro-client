@@ -10,7 +10,7 @@ export default function NumberOnline() {
   const [numberOnline, setNumberOnline] = useState(1);
 
   useEffect(() => {
-    console.log("in useEffect to get number of online users");
+    // console.log("in useEffect to get number of online users");
 
     // add a listener to the # of people online (# items in connections)
     const handleValueChange = onValue(connectionsRef, (snap) => {

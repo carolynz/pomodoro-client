@@ -112,7 +112,7 @@ export default function Home() {
   // Check for state updates/timer updates every second
   useEffect(() => {
     const interval = setInterval(updatePomodoroState, 1000);
-    console.log("new useEffect");
+    // console.log("new useEffect");
     return () => clearInterval(interval);
   }, []);
 
