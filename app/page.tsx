@@ -82,14 +82,15 @@ export default function Home() {
     if (currentSeconds === 0 && appOpen) {
       // Check if it's the start of a new minute
       console.log("currentSeconds === 0");
-      if (
-        currentMinutes === 17 ||
-        currentMinutes === 25 ||
-        currentMinutes === 30 ||
-        currentMinutes === 55
-      ) {
-        playTimerSound();
-      }
+      playTimerSound();
+      // if (
+      //   currentMinutes === 0 ||
+      //   currentMinutes === 25 ||
+      //   currentMinutes === 30 ||
+      //   currentMinutes === 55
+      // ) {
+      //   playTimerSound();
+      // }
     }
 
     // Determine the remaining time in the cycle by subtracting the elapsed time from the total time for that cycle
